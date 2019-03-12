@@ -25,21 +25,20 @@ class MQTT:
             exit(-99)
 
     def on_message(self, client, userdata, message):
-        print(" message received " ,str(message.payload.decode("utf-8")))
-        print(" message topic=",message.topic)
-        print(" message qos=",message.qos)
-        print(" message retain flag=",message.retain)
-
+        print("Received message:[{0}] on topic:[{1}] qos:[{2}] retain flag:[{3}]".format(str(message.payload.decode("utf-8")), 
+                                                                                             message.topic, 
+                                                                                             message.qos, 
+                                                                                             message.retain) )
     def publish(self, topic_name, payload):
         self.mqtt_client.publish(topic_name, payload=payload, qos=0, retain=False)
-        pass
+        print("Publishing message to broker on topic:[{0}] with the following payload {1}".format(topic,payload) )
 
     def subscribe(self, topic_name):
         self.mqtt_client.subscribe(topic=topic_name, qos=0)
-        pass
+        print("Client has been subscribed on topic:[{0}]".format(topic_name))
 
-pippo = MQTT("127.0.0.1", "MQTT_CLIENT_1", "IOT_TOPIC", 1883)
-pippo.subscribe("IOT_TOPIC")
+instance = MQTT("127.0.0.1", "MQTT_CLIENT_1", "IOT_TOPIC", 1883)
+instance.subscribe("IOT_TOPIC")
 while(True):
-    pippo.publish("IOT_TOPIC", "HELLO IOT")
+    instance.publish("IOT_TOPIC", "HELLO IOT")
     time.sleep(1)
